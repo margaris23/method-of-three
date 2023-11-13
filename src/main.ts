@@ -1,22 +1,29 @@
 import './style.css';
 
-const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('input');
-inputs.item(0).value = '5';  // lefttop 
-inputs.item(1).value = '10'; // leftbottom
-inputs.item(2).value = '1';  // righttop
-inputs.item(3).value = '2';  // rightbottom
+const initial = ['16', '1', '24', '1.5'];
 
-inputs.item(3).disabled = true;  // rightbottom is the result
+/**
+ * Solves: a / b = c / x
+ * @returns {number} x = c * b / a
+ */
+const methodOfThree = (a: number, b: number, c: number): number => c * b / a;
 
+// impure
 function calculate() {
-  const res = Number(inputs.item(2).value) * Number(inputs.item(1).value) / Number(inputs.item(0).value);
+  const inputs: NodeListOf<HTMLInputElement> = document.querySelectorAll('input');
+  const getvalue = (i: number) => Number(inputs.item(i).value);
+
+  const res = methodOfThree(getvalue(0), getvalue(1), getvalue(2));
+
   if (isNaN(res) || !Number.isFinite(res)) {
     inputs.item(3).value = '';
   } else {
     inputs.item(3).value = res.toLocaleString();
   }
 }
-function inputChanged(event: Event) {
+
+// impure
+function handleInputChange(event: Event) {
   const target = event.target as HTMLInputElement;
   target.classList.remove('error');
 
@@ -30,6 +37,16 @@ function inputChanged(event: Event) {
   calculate();
 }
 
-inputs.forEach((input, index) => {
-  index < 3 && input.addEventListener('input', inputChanged);
+// init
+document.querySelectorAll('input').forEach((input, index) => {
+  // initial values
+  input.value = initial[index];
+
+  if (index < 3) {
+    // listeners except result
+    input.addEventListener('input', handleInputChange);
+  } else {
+    // disable result
+    input.disabled = true;
+  }
 })

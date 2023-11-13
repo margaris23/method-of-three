@@ -48,19 +48,44 @@ form {
   margin: auto;
 }
 
+label {
+  position: relative;
+}
+
 input {
   font-size: 1.5rem;
+  width: 100%;
+  border: none;
+  padding: 0 0 0 05.rem;
+}
+
+input:where(:focus, :focus-visible) {
+  outline-style: dashed;
+  outline-color: #d49552;
+  outline-width: 3px;
+}
+
+input+i {
+  display: none;
+  position: absolute;
+  font-size: 40px;
+  color: red;
+  right: 0;
 }
 
 input.error {
-  border: 2px solid red;
+  outline-color: red;
 }
 
-input[name='lefttop'] {
+input.error+i {
+  display: inline-block;
+}
+
+form label:first-child() {
   grid-area: lt;
 }
 
-input[name='leftbottom'] {
+form label:nth-child(2) {
   grid-area: lb;
 }
 
